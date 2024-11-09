@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reshanims Dashboard</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body style="background-color: white;">
+
+    <a href="index.html" class="btn">Go Back</a>
+
+<header>
+    <div class="date-picker">
+        <label for="date-range"></label>
+        <select id="date-range" onchange="updateDashboardData()">
+        </select>
+    </div>    
+    <div class="summary-cards">
+        <div class="card">
+            <h2>Total Page Views</h2>
+            <p>15,320</p>
+        </div>
+        <div class="card">
+            <h2>Unique Visitors</h2>
+            <p>7,890</p>
+        </div>
+        <div class="card">
+            <h2>Conversion Rate</h2>
+            <p>2.5%</p>
+        </div>
+    </div>
+</header>
+
+<section id="page-views">
+    <h2>Page Views per Section</h2>
+    <canvas id="pageViewsChart"></canvas>
+    <h3>Top Pages</h3>
+    <ul class="top-pages">
+        <li>Animations - 5,000 views</li>
+        <li>Shorts - 3,200 views</li>
+        <li>Contact - 1,800 views</li>
+        <li>Hire Me - 1,400 views</li>
+        <li>About - 1,000 views</li>
+    </ul>
+</section>
+
+<section id="user-interactions">
+    <h2>User Interactions</h2>
+    <div class="charts">
+        <div class="chart">
+            <h3>Clicks & Downloads</h3>
+            <canvas id="clicksDownloadsChart"></canvas>
+        </div>
+        <div class="chart">
+            <h3>Form Submissions</h3>
+            <p>Newsletter signups: 230</p>
+            <p>Hire Me clicks: 120</p>
+            <p>Completion Rate: 85%</p>
+        </div>
+    </div>
+</section>
+
+<section id="conversion-metrics">
+    <h2>Conversion Metrics</h2>
+    <div class="metrics">
+        <div class="metric">
+            <h3>Task Completion Rates</h3>
+            <p>Animation views: 75%</p>
+            <p>Illustration clicks: 60%</p>
+        </div>
+        <div class="metric">
+            <h3>Conversion Funnel</h3>
+            <canvas id="conversionFunnelChart"></canvas>
+        </div>
+    </div>
+</section>
+
+<section id="engagement-time">
+    <h2>Engagement Over Time</h2>
+    <canvas id="engagementChart"></canvas>
+</section>
+
+<script src="static/script.js"></script>
+<script>
+async function fetchDataForDateRange(days) {
+    try {
+        const response = await fetch('static/mockData.json');
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error loading data:", error);
+    }
+}
+
+function updateDashboardData() {
+    const dateRange = document.getElementById("date-range").value;
+    fetchDataForDateRange(dateRange).then(data => {
+        if (!data) return;
+
+        
+        document.querySelector(".summary-cards .card:nth-child(1) p").textContent = data.summary.total_page_views;
+        document.querySelector(".summary-cards .card:nth-child(2) p").textContent = data.summary.unique_visitors;
+        document.querySelector(".summary-cards .card:nth-child(3) p").textContent = `${data.summary.conversion_rate}%`;
+
+        
+        const pageViewsData = {
+            labels: data.page_views_per_section.map(item => item.section),
+            datasets: [{
+                label: "Page Views",
+                data: data.page_views_per_section.map(item => item.views),
+                backgroundColor: "purple",
+                borderColor: "black",
+                borderWidth: 1
+            }]
+        };
+        pageViewsChart.data = pageViewsData;
+        pageViewsChart.update();
+
+        
+        const topPagesList = document.querySelector(".top-pages");
+        topPagesList.innerHTML = "";
+        data.top_pages.forEach(page => {
+            const listItem = document.createElement("li");
+            listItem.textContent = `${page.page} - ${page.views} views`;
+            topPagesList.appendChild(listItem);
+        });
+
+        
+        const clicksDownloadsData = {
+            labels: data.user_interactions.clicks_downloads.map(item => item.section),
+            datasets: [{
+                label: "Clicks & Downloads",
+                data: data.user_interactions.clicks_downloads.map(item => item.clicks),
+                backgroundColor: ["#A569BD", "#85C1E9", "#F7DC6F", "#F1948A"],
+                hoverOffset: 4
+            }]
+        };
+        clicksDownloadsChart.data = clicksDownloadsData;
+        clicksDownloadsChart.update();
+
+        
+        const engagementOverTimeData = {
+            labels: data.engagement_over_time.map(item => item.date),
+            datasets: [{
+                label: "Engagement",
+                data: data.engagement_over_time.map(item => item.engagement),
+                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                borderColor: "rgba(75, 192, 192, 1)",
+                borderWidth: 1
+            }]
+        };
+        engagementChart.data = engagementOverTimeData;
+        engagementChart.update();
+    });
+}
+
+
+let pageViewsChart = new Chart(document.getElementById('pageViewsChart'), { type: 'bar' });
+let clicksDownloadsChart = new Chart(document.getElementById('clicksDownloadsChart'), { type: 'pie' });
+let engagementChart = new Chart(document.getElementById('engagementChart'), { type: 'line' });
+
+
+document.addEventListener("DOMContentLoaded", () => updateDashboardData());
+</script>

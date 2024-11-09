@@ -1,0 +1,45 @@
+{
+    "summary": {
+        "total_page_views": 15320,
+        "unique_visitors": 7890,
+        "conversion_rate": 2.5
+    },
+    "page_views_per_section": [
+        {"section": "Animations", "views": 5000},
+        {"section": "Shorts", "views": 3200},
+        {"section": "Contact", "views": 1800},
+        {"section": "Hire Me", "views": 1400},
+        {"section": "About", "views": 1000}
+    ],
+    "top_pages": [
+        {"page": "Animations", "views": 5000},
+        {"page": "Shorts", "views": 3200},
+        {"page": "Contact", "views": 1800},
+        {"page": "Hire Me", "views": 1400},
+        {"page": "About", "views": 1000}
+    ],
+    "user_interactions": {
+        "clicks_downloads": [
+            {"section": "Animations", "clicks": 200},
+            {"section": "Shorts", "clicks": 150},
+            {"section": "Hire Me", "clicks": 100},
+            {"section": "About", "clicks": 80}
+        ],
+        "form_submissions": {
+            "newsletter_signups": 230,
+            "hire_me_clicks": 120,
+            "completion_rate": 85
+        }
+    },
+    "task_completion_rates": [
+        {"task": "Animation views", "rate": 75},
+        {"task": "Illustration clicks", "rate": 60}
+    ],
+    "engagement_over_time": [
+        {"date": "2024-11-01", "engagement": 150},
+        {"date": "2024-11-02", "engagement": 200},
+        {"date": "2024-11-03", "engagement": 170},
+        {"date": "2024-11-04", "engagement": 190},
+        {"date": "2024-11-05", "engagement": 220}
+    ]
+}
